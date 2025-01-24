@@ -136,4 +136,20 @@ public class SaudacaoTests {
         assertEquals(esperado, resultado);
     }
 
+    // Requisito 8
+    // Permita que a entrada informe vírgulas intencionalmente usando caracteres de escape. Isso pode ser feito da mesma forma que em arquivos CSV, com aspas duplas em volta da entrada. Por exemplo para ["Maria", "\"Nina, Lúcia\""], retornar "Olá, Maria e Nina, Lúcia".
+    @Test
+    public void saudacaoComListaDeNomesComEscapes() {
+        List<String> nomes = new ArrayList<>();
+
+        nomes.add("Maria");
+        nomes.add("Carla, Thaína");
+        nomes.add("\"Nina, Lúcia\"");
+        
+        String resultado = saudacao.saudarSimples(nomes);
+        String esperado = "Olá, Maria, Carla, Thaína e Nina, Lúcia";
+
+        assertEquals(esperado, resultado);
+    }
+    
 }

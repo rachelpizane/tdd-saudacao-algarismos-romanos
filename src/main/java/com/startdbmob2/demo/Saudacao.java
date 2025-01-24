@@ -7,15 +7,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class Saudacao {
+    public String saudarSimples(){
+        return "Olá, você aí";
+    }
 
     public String saudarSimples(String nome){
-        String mensagemPadrao = "Olá, você aí";
-        if(nome == null) {
-            return mensagemPadrao;
-        }
-
-        if(nome.isEmpty()){
-            return mensagemPadrao;
+        if(nome == null || nome.isEmpty()) {
+            return "Olá, você aí";
         }
 
         if (nome.equals(nome.toUpperCase())){
@@ -25,38 +23,38 @@ public class Saudacao {
         return String.format("Olá, %s", nome);
     }
 
-    public String saudarSimples(){
-        return "Olá, você aí";
-    }
-
     public String saudarSimples(List<String> nomes){
         List<String> nomesFormatados = new ArrayList<>();
 
         int ultimoIndex;
-        
-        String mensagem = "Olá";
-        String mensagemGritada = " E OLÁ";
-        boolean temNomeGritado = false;
-
-        
+        String mensagem;
+        String mensagemGritada;
+        boolean temNomeGritado;
 
         for(int i = 0; i < nomes.size(); i++) {
             String item = nomes.get(i);
+            boolean contemEscape = item.contains("\"");
 
-            if(item.contains(",")){
-                String[] itens = item.split((","));
+            if(item.contains(",") && !contemEscape){ // Se conter uma virgula e não conter uma escape.
+                String[] itens = item.split((",")); // Separar nomes pela virgula
 
-                for(int j = 0; j < itens.length; j++) {
-                    itens[j] = itens[j].trim();
-                    nomesFormatados.add(itens[j]);
+                for(int j = 0; j < itens.length; j++) { // Acessar cada nome da nova array
+                    itens[j] = itens[j].trim(); // Retirar espaços dos cantos;
+                    nomesFormatados.add(itens[j]); // Incluir na nova lista.
                 }
-                continue;
+                
+                continue; // Seguir para o próximo loop.
             }
-            nomesFormatados.add(item);
+             
+            item = item.replace("\"", ""); // Retirar os escapes (Se tiver);
 
+            nomesFormatados.add(item); // Incluir na nova lista.
         }
 
         ultimoIndex = nomesFormatados.size() - 1;
+        mensagem = "Olá";
+        mensagemGritada = " E OLÁ";
+        temNomeGritado = false;
 
         if(nomesFormatados.size() == 1){
             return this.saudarSimples(nomesFormatados.get(0));
@@ -81,7 +79,6 @@ public class Saudacao {
             }
 
             mensagem  = mensagem + complementoMensagem;
-            System.out.print(mensagem);
         }
 
         if(!temNomeGritado){

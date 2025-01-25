@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ConversorNumerico {
-    Map<String, Integer> algarismosRomanos = new HashMap<>();
+    Map<String, Integer> algarismosRomanos = new HashMap<String, Integer>();
     
     public int converterRomanosParaArabicos(String algarismoRomano){
         this.setAlgarismosRomanos();
@@ -17,7 +17,7 @@ public class ConversorNumerico {
 
         for(int i = 0; i < algarismoRomanoArray.length; i++){
             int numAtual;
-            int numProxima;
+            int numProximo;
 
             numAtual = this.algarismosRomanos.get(algarismoRomanoArray[i]);
 
@@ -26,9 +26,9 @@ public class ConversorNumerico {
                 continue;
             }
             
-            numProxima = this.algarismosRomanos.get(algarismoRomanoArray[i + 1]);
+            numProximo = this.algarismosRomanos.get(algarismoRomanoArray[i + 1]);
 
-            if(numAtual < numProxima){
+            if(numAtual < numProximo){
                 soma -= numAtual;
                 continue;
             }

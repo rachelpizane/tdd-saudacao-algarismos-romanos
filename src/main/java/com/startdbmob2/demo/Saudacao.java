@@ -1,17 +1,19 @@
 package com.startdbmob2.demo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class Saudacao {
-    public String saudarSimples(){
+    public String saudar(){
         return "Olá, você aí";
     }
 
-    public String saudarSimples(String nome){
+    public String saudar(String nome){
         if(nome == null || nome.isEmpty()) {
             return "Olá, você aí";
         }
@@ -23,13 +25,48 @@ public class Saudacao {
         return String.format("Olá, %s", nome);
     }
 
-    public String saudarSimples(List<String> nomes){
+    public String saudar(List<String> nomes){
         List<String> nomesFormatados = new ArrayList<>();
+        List<String> nomesFormatadosSimples = new ArrayList<>();
+        List<String> nomesFormatadosGritados = new ArrayList<>();
 
-        int ultimoIndex;
-        String mensagem;
+        String mensagemSimples;
         String mensagemGritada;
-        boolean temNomeGritado;
+
+        if(nomes.size() == 0){
+            return this.saudar();
+        }
+
+        nomesFormatados = formatarListaNomes(nomes);
+        
+        if(nomesFormatados.size() == 1){
+            return this.saudar(nomesFormatados.get(0));
+        }
+
+        for(int i = 0; i < nomesFormatados.size(); i++){
+            String nome = nomes.get(i);
+
+            if(nome.equals(nome.toUpperCase())){
+                nomesFormatadosGritados.add(nome);
+                continue;
+            }
+
+            nomesFormatadosSimples.add(nome); 
+        }
+
+        mensagemSimples = construirMensagem(nomesFormatadosSimples, false);
+
+        if(nomesFormatadosGritados.size() == 0){
+            return mensagemSimples;
+        }
+
+        mensagemGritada = construirMensagem(nomesFormatadosGritados, true);
+
+        return String.format("%s. E %s!!!", mensagemSimples, mensagemGritada);
+    }
+
+    private List<String> formatarListaNomes(List<String> nomes){
+        List<String> nomesFormatados = new ArrayList<>();
 
         for(int i = 0; i < nomes.size(); i++) {
             String item = nomes.get(i);
@@ -51,41 +88,30 @@ public class Saudacao {
             nomesFormatados.add(item); // Incluir na nova lista.
         }
 
-        ultimoIndex = nomesFormatados.size() - 1;
-        mensagem = "Olá";
-        mensagemGritada = " E OLÁ";
-        temNomeGritado = false;
+        return nomesFormatados;
+    }
 
-        if(nomesFormatados.size() == 1){
-            return this.saudarSimples(nomesFormatados.get(0));
-        }
+    private String construirMensagem(List<String> nomes, boolean ehNomeGritado){
+        int ultimoIndex = nomes.size() - 1;
+        String mensagem = "Olá";
 
-        for(int i = 0; i < nomesFormatados.size(); i++) {
-            String nome = nomesFormatados.get(i);
+        for(int i = 0; i < nomes.size(); i++) {
+            String nome = nomes.get(i);
             String conexaoTexto = ", ";
 
-            String complementoMensagem;
-
-            if(ultimoIndex == i){
+            if(nomes.size() != 1 && i == ultimoIndex){
                 conexaoTexto = " e ";
             }
 
-            complementoMensagem = conexaoTexto + nome;
-
-            if(nome.equals(nome.toUpperCase())){
-                temNomeGritado = true;
-                mensagemGritada = mensagemGritada + complementoMensagem;
-                continue;
-            }
-
-            mensagem  = mensagem + complementoMensagem;
+            mensagem  = mensagem + conexaoTexto + nome;
         }
 
-        if(!temNomeGritado){
-            return mensagem;
+        if(ehNomeGritado){
+            return mensagem.toUpperCase();
         }
 
-        return String.format("%s.%s!!!", mensagem, mensagemGritada);
+        return mensagem;
+
     }
    
 }

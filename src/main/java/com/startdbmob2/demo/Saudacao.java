@@ -1,9 +1,7 @@
 package com.startdbmob2.demo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -43,24 +41,16 @@ public class Saudacao {
             return this.saudar(nomesFormatados.get(0));
         }
 
-        for(int i = 0; i < nomesFormatados.size(); i++){
-            String nome = nomes.get(i);
+        nomesFormatadosSimples = this.separarNomes(nomesFormatados, false);
+        nomesFormatadosGritados = this.separarNomes(nomesFormatados, true);
 
-            if(nome.equals(nome.toUpperCase())){
-                nomesFormatadosGritados.add(nome);
-                continue;
-            }
-
-            nomesFormatadosSimples.add(nome); 
-        }
-
-        mensagemSimples = construirMensagem(nomesFormatadosSimples, false);
+        mensagemSimples = this.construirMensagem(nomesFormatadosSimples, false);
 
         if(nomesFormatadosGritados.size() == 0){
             return mensagemSimples;
         }
-
-        mensagemGritada = construirMensagem(nomesFormatadosGritados, true);
+        
+        mensagemGritada = this.construirMensagem(nomesFormatadosGritados, true);
 
         return String.format("%s. E %s!!!", mensagemSimples, mensagemGritada);
     }
@@ -89,11 +79,24 @@ public class Saudacao {
         }
 
         return nomesFormatados;
+    } 
+
+    private List<String> separarNomes(List<String> nomes, boolean ehGritado){
+        List<String> nomesFiltrados = nomes.stream().filter(nome -> {
+            if(ehGritado){
+                return nome.equals(nome.toUpperCase());
+            }
+
+            return !nome.equals(nome.toUpperCase());
+        }).toList();
+
+        return nomesFiltrados;
     }
 
-    private String construirMensagem(List<String> nomes, boolean ehNomeGritado){
-        int ultimoIndex = nomes.size() - 1;
+    private String construirMensagem(List<String> nomes, boolean ehGritado) {
         String mensagem = "Olá";
+
+        int ultimoIndex = nomes.size() - 1;
 
         for(int i = 0; i < nomes.size(); i++) {
             String nome = nomes.get(i);
@@ -106,12 +109,10 @@ public class Saudacao {
             mensagem  = mensagem + conexaoTexto + nome;
         }
 
-        if(ehNomeGritado){
+        if(ehGritado){
             return mensagem.toUpperCase();
         }
 
         return mensagem;
-
     }
-   
 }

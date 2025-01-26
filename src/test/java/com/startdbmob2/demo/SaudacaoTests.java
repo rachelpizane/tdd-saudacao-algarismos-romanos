@@ -150,7 +150,6 @@ public class SaudacaoTests {
         nomes.add(nome6);
 
         String resultado = saudacao.saudar(nomes);
-        //String esperado = "Olá, Maria, Nina e Rachel. E OLÁ, LÚCIA, CARLA E VITORIA!!!";
         assertEquals(esperado, resultado);
     }
     

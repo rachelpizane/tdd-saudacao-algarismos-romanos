@@ -1,4 +1,4 @@
-package com.startdbmob2.demo;
+package com.startdbmob.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

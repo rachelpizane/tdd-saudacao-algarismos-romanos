@@ -1,4 +1,4 @@
-package com.startdbmob2.demo;
+package com.startdbmob.demo.saudacao;
 
 import java.util.ArrayList;
 import java.util.List;
